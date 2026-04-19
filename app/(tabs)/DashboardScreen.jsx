@@ -111,7 +111,6 @@ const DashboardScreen = () => {
           >
             <GlassCard style={styles.cameraCard}>
               <View style={styles.cameraPreview}>
-                <View style={styles.cameraGradient} />
                 <View style={styles.cameraIconContainer}>
                   <Video color="rgba(255,255,255,0.15)" size={wp(20)} />
                 </View>
@@ -138,7 +137,7 @@ const DashboardScreen = () => {
 
           {/* Status Cards Grid */}
           <View style={styles.statusGrid}>
-            <GlassCard style={[styles.statusCard, { marginRight: wp(3) }]}>
+            <GlassCard style={[styles.statusCard, styles.statusCardMargin]}>
               <View style={styles.statusHeader}>
                 <View style={[styles.statusIconContainer, isArmed ? styles.armedIconBg : styles.disarmedIconBg]}>
                   <Shield color={isArmed ? "#10B981" : "#4DB6AC"} size={wp(5.5)} />
@@ -262,7 +261,7 @@ const DashboardScreen = () => {
 
           {/* Bottom Stats Grid */}
           <View style={styles.bottomStatsGrid}>
-            <GlassCard style={[styles.statCard, { marginRight: wp(3) }]}>
+            <GlassCard style={[styles.statCard, styles.statCardMargin]}>
               <View style={styles.statContent}>
                 <View style={[styles.statIconContainer, styles.successIconBg]}>
                   <CheckCircle color="#10B981" size={wp(5)} />
@@ -295,15 +294,19 @@ const DashboardScreen = () => {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
+    backgroundColor: '#0B0E14',
   },
   scrollViewContent: {
     flexGrow: 1,
     paddingBottom: hp(2),
+    backgroundColor: '#0B0E14',
   },
   container: {
     flex: 1,
     paddingHorizontal: wp(4),
     paddingTop: hp(2),
+    paddingBottom: hp(8),
+    backgroundColor: '#0B0E14',
   },
   header: {
     flexDirection: 'row',
@@ -329,7 +332,7 @@ const styles = StyleSheet.create({
     width: wp(13),
     height: wp(13),
     borderRadius: wp(6.5),
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
+    backgroundColor: '#1A1F2E',
     borderWidth: 2,
     borderColor: '#4DB6AC',
     alignItems: 'center',
@@ -341,19 +344,12 @@ const styles = StyleSheet.create({
   cameraCard: {
     padding: 0,
     overflow: 'hidden',
+    backgroundColor: '#1A1F2E',
   },
   cameraPreview: {
     aspectRatio: 16 / 9,
     backgroundColor: '#0B0E14',
     position: 'relative',
-  },
-  cameraGradient: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(77, 182, 172, 0.08)',
   },
   cameraIconContainer: {
     position: 'absolute',
@@ -370,11 +366,10 @@ const styles = StyleSheet.create({
     left: wp(3),
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: '#141922',
     paddingHorizontal: wp(2.5),
     paddingVertical: hp(0.5),
     borderRadius: wp(5),
-    backdropFilter: 'blur(10px)',
   },
   liveDot: {
     width: wp(2),
@@ -393,11 +388,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: hp(1.5),
     left: wp(3),
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: '#141922',
     paddingHorizontal: wp(3),
     paddingVertical: hp(0.6),
     borderRadius: wp(5),
-    backdropFilter: 'blur(10px)',
   },
   cameraLabelText: {
     fontSize: wp(3.5),
@@ -408,12 +402,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: hp(1.5),
     right: wp(3),
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#1A1F2E',
     padding: wp(2.5),
     borderRadius: wp(3),
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.3)',
-    backdropFilter: 'blur(10px)',
+    borderColor: '#4DB6AC',
   },
   statusGrid: {
     flexDirection: 'row',
@@ -422,6 +415,10 @@ const styles = StyleSheet.create({
   statusCard: {
     flex: 1,
     padding: wp(4),
+    backgroundColor: '#1A1F2E',
+  },
+  statusCardMargin: {
+    marginRight: wp(3),
   },
   statusHeader: {
     flexDirection: 'row',
@@ -440,19 +437,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   armedIconBg: {
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    backgroundColor: '#1A2A1A',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderColor: '#10B981',
   },
   disarmedIconBg: {
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#1A1F2E',
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.3)',
+    borderColor: '#4DB6AC',
   },
   cameraIconBg: {
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#1A1F2E',
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.3)',
+    borderColor: '#4DB6AC',
   },
   statusLabel: {
     fontSize: wp(3.2),
@@ -474,14 +471,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   armButtonStyle: {
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    backgroundColor: '#1A2A1A',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderColor: '#10B981',
   },
   disarmButton: {
-    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+    backgroundColor: '#2A1A1A',
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.3)',
+    borderColor: '#EF4444',
   },
   armButtonText: {
     fontSize: wp(3.5),
@@ -498,9 +495,9 @@ const styles = StyleSheet.create({
     paddingVertical: hp(1.2),
     borderRadius: wp(2.5),
     alignItems: 'center',
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#1A1F2E',
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.3)',
+    borderColor: '#4DB6AC',
   },
   viewAllButtonText: {
     fontSize: wp(3.5),
@@ -510,6 +507,7 @@ const styles = StyleSheet.create({
   alertsCard: {
     padding: wp(4),
     marginBottom: hp(2.5),
+    backgroundColor: '#1A1F2E',
   },
   alertsHeader: {
     flexDirection: 'row',
@@ -525,7 +523,7 @@ const styles = StyleSheet.create({
     width: wp(9),
     height: wp(9),
     borderRadius: wp(4.5),
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#141922',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: wp(2.5),
@@ -536,12 +534,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   alertsBadge: {
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#141922',
     paddingHorizontal: wp(3),
     paddingVertical: hp(0.5),
     borderRadius: wp(5),
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.3)',
+    borderColor: '#4DB6AC',
   },
   alertsCount: {
     fontSize: wp(3),
@@ -558,7 +556,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#141922',
     borderRadius: wp(3),
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.1)',
+    borderColor: '#2A2F3E',
     borderLeftWidth: wp(1),
     marginBottom: hp(1.2),
   },
@@ -571,13 +569,13 @@ const styles = StyleSheet.create({
     marginRight: wp(3),
   },
   severityAlert: {
-    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+    backgroundColor: '#2A1A1A',
   },
   severityWarning: {
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+    backgroundColor: '#2A251A',
   },
   severityInfo: {
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#1A1F2E',
   },
   alertContent: {
     flex: 1,
@@ -599,9 +597,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    backgroundColor: '#2A1A1A',
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.2)',
+    borderColor: '#EF4444',
   },
   criticalThreatsText: {
     fontSize: wp(3.6),
@@ -612,6 +610,7 @@ const styles = StyleSheet.create({
   activityCard: {
     padding: wp(4),
     marginBottom: hp(2.5),
+    backgroundColor: '#1A1F2E',
   },
   activityHeader: {
     flexDirection: 'row',
@@ -631,7 +630,7 @@ const styles = StyleSheet.create({
   viewAllLinkButton: {
     paddingHorizontal: wp(3),
     paddingVertical: hp(0.8),
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
+    backgroundColor: '#141922',
     borderRadius: wp(5),
   },
   viewAllLink: {
@@ -648,7 +647,7 @@ const styles = StyleSheet.create({
   },
   activityItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(77, 182, 172, 0.1)',
+    borderBottomColor: '#2A2F3E',
   },
   activityDot: {
     width: wp(2.5),
@@ -675,6 +674,10 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     padding: wp(4),
+    backgroundColor: '#1A1F2E',
+  },
+  statCardMargin: {
+    marginRight: wp(3),
   },
   statContent: {
     flexDirection: 'row',
@@ -692,14 +695,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   successIconBg: {
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    backgroundColor: '#1A2A1A',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderColor: '#10B981',
   },
   infoIconBg: {
-    backgroundColor: 'rgba(77, 182, 172, 0.15)',
+    backgroundColor: '#1A1F2E',
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.3)',
+    borderColor: '#4DB6AC',
   },
   statLabel: {
     fontSize: wp(3.2),

@@ -36,42 +36,37 @@ const DroneScreen = () => {
 
   const getBatteryColor = () => {
     if (batteryLevel > 50) return "#10B981";
-    if (batteryLevel > 20) return "#FBBF24";
+    if (batteryLevel > 20) return "#F59E0B";
     return "#EF4444";
   };
 
   const handlePatrolToggle = () => {
     if (isConnected) {
       setIsPatrolling(!isPatrolling);
-      // Add actual patrol control logic here
     }
   };
 
   const handleManualControl = () => {
     if (isConnected) {
       console.log('Manual control activated');
-      // Navigate to manual control screen or activate mode
     }
   };
 
   const handleReturnHome = () => {
     if (isConnected) {
       console.log('Returning to home');
-      // Add return to home logic here
     }
   };
 
   const handleDirectionControl = (direction) => {
     if (isConnected) {
       console.log(`Moving ${direction}`);
-      // Add direction control logic here
     }
   };
 
   const handleRotate = (direction) => {
     if (isConnected) {
       console.log(`Rotating ${direction}`);
-      // Add rotation logic here
     }
   };
 
@@ -108,20 +103,21 @@ const DroneScreen = () => {
           {/* Camera Feed Card */}
           <GlassCard style={styles.cameraCard}>
             <View style={styles.cameraPreview}>
-              <View style={styles.cameraGradient} />
               <View style={styles.cameraIconContainer}>
-                <Video color="rgba(255,255,255,0.4)" size={wp(16)} />
+                <Video color="#4DB6AC" size={wp(16)} opacity={0.3} />
               </View>
               
               {isConnected && (
                 <>
                   <View style={styles.liveIndicator}>
                     <View style={styles.liveDot} />
-                    <Text style={styles.liveText}>Live Feed</Text>
+                    <Text style={styles.liveText}>LIVE</Text>
                   </View>
                   <View style={styles.batteryIndicator}>
-                    <Battery color={getBatteryColor()} size={wp(4)} />
-                    <Text style={styles.batteryText}>{batteryLevel}%</Text>
+                    <Battery color={getBatteryColor()} size={wp(4.5)} />
+                    <Text style={[styles.batteryText, { color: getBatteryColor() }]}>
+                      {batteryLevel}%
+                    </Text>
                   </View>
                 </>
               )}
@@ -136,12 +132,20 @@ const DroneScreen = () => {
 
           {/* Drone Stats Grid */}
           <View style={styles.statsGrid}>
-            {droneStats.map((stat) => {
+            {droneStats.map((stat, index) => {
               const IconComponent = stat.icon;
               return (
-                <GlassCard key={stat.label} style={styles.statCard}>
+                <GlassCard 
+                  key={stat.label} 
+                  style={[
+                    styles.statCard,
+                    index < droneStats.length - 1 && styles.statCardMargin
+                  ]}
+                >
                   <View style={styles.statContent}>
-                    <IconComponent color="#4DB6AC" size={wp(5)} />
+                    <View style={styles.statIconContainer}>
+                      <IconComponent color="#4DB6AC" size={wp(5)} />
+                    </View>
                     <Text style={styles.statLabel}>{stat.label}</Text>
                     <Text style={styles.statValue}>{stat.value}</Text>
                   </View>
@@ -153,7 +157,9 @@ const DroneScreen = () => {
           {/* Quick Actions Card */}
           <GlassCard style={styles.quickActionsCard}>
             <View style={styles.sectionHeader}>
-              <Play color="#4DB6AC" size={wp(5)} />
+              <View style={styles.sectionIconBadge}>
+                <Play color="#4DB6AC" size={wp(4.5)} />
+              </View>
               <Text style={styles.sectionTitle}>Quick Actions</Text>
             </View>
 
@@ -170,14 +176,14 @@ const DroneScreen = () => {
               >
                 {isPatrolling ? (
                   <>
-                    <Square color="#EF4444" size={wp(5)} />
+                    <Square color="#EF4444" size={wp(4.5)} />
                     <Text style={[styles.patrolButtonText, styles.stopPatrolText]}>
                       Stop Surveillance Patrol
                     </Text>
                   </>
                 ) : (
                   <>
-                    <Play color="#10B981" size={wp(5)} />
+                    <Play color="#10B981" size={wp(4.5)} />
                     <Text style={[styles.patrolButtonText, styles.startPatrolText]}>
                       Start Surveillance Patrol
                     </Text>
@@ -215,7 +221,14 @@ const DroneScreen = () => {
 
           {/* Manual Control Pad */}
           <GlassCard style={styles.controlPadCard}>
-            <Text style={styles.controlPadTitle}>Manual Control</Text>
+            <View style={styles.controlPadHeader}>
+              <Text style={styles.controlPadTitle}>Manual Control</Text>
+              {!isConnected && (
+                <View style={styles.offlineBadge}>
+                  <Text style={styles.offlineBadgeText}>Offline</Text>
+                </View>
+              )}
+            </View>
             
             <View style={styles.controlPadContainer}>
               <View style={styles.controlPadOuter}>
@@ -223,7 +236,7 @@ const DroneScreen = () => {
 
                 {/* Up Button */}
                 <TouchableOpacity
-                  style={[styles.directionButton, styles.upButton]}
+                  style={[styles.directionButton, styles.upButton, !isConnected && styles.directionDisabled]}
                   onPress={() => handleDirectionControl('forward')}
                   disabled={!isConnected}
                   activeOpacity={0.7}
@@ -233,7 +246,7 @@ const DroneScreen = () => {
 
                 {/* Down Button */}
                 <TouchableOpacity
-                  style={[styles.directionButton, styles.downButton]}
+                  style={[styles.directionButton, styles.downButton, !isConnected && styles.directionDisabled]}
                   onPress={() => handleDirectionControl('backward')}
                   disabled={!isConnected}
                   activeOpacity={0.7}
@@ -243,7 +256,7 @@ const DroneScreen = () => {
 
                 {/* Left Button */}
                 <TouchableOpacity
-                  style={[styles.directionButton, styles.leftButton]}
+                  style={[styles.directionButton, styles.leftButton, !isConnected && styles.directionDisabled]}
                   onPress={() => handleDirectionControl('left')}
                   disabled={!isConnected}
                   activeOpacity={0.7}
@@ -253,7 +266,7 @@ const DroneScreen = () => {
 
                 {/* Right Button */}
                 <TouchableOpacity
-                  style={[styles.directionButton, styles.rightButton]}
+                  style={[styles.directionButton, styles.rightButton, !isConnected && styles.directionDisabled]}
                   onPress={() => handleDirectionControl('right')}
                   disabled={!isConnected}
                   activeOpacity={0.7}
@@ -262,8 +275,8 @@ const DroneScreen = () => {
                 </TouchableOpacity>
 
                 {/* Center Drone Icon */}
-                <View style={styles.centerDroneIcon}>
-                  <Plane color="#4DB6AC" size={wp(8)} />
+                <View style={[styles.centerDroneIcon, !isConnected && styles.centerDroneDisabled]}>
+                  <Plane color={isConnected ? "#4DB6AC" : "#6B7280"} size={wp(7)} />
                 </View>
               </View>
             </View>
@@ -273,25 +286,29 @@ const DroneScreen = () => {
               <TouchableOpacity
                 style={[
                   styles.rotateButton,
-                  !isConnected && styles.disabledButton
+                  !isConnected && styles.rotateDisabled
                 ]}
                 onPress={() => handleRotate('left')}
                 disabled={!isConnected}
                 activeOpacity={0.7}
               >
-                <Text style={styles.rotateButtonText}>Rotate Left</Text>
+                <Text style={[styles.rotateButtonText, !isConnected && styles.rotateTextDisabled]}>
+                  Rotate Left
+                </Text>
               </TouchableOpacity>
               
               <TouchableOpacity
                 style={[
                   styles.rotateButton,
-                  !isConnected && styles.disabledButton
+                  !isConnected && styles.rotateDisabled
                 ]}
                 onPress={() => handleRotate('right')}
                 disabled={!isConnected}
                 activeOpacity={0.7}
               >
-                <Text style={styles.rotateButtonText}>Rotate Right</Text>
+                <Text style={[styles.rotateButtonText, !isConnected && styles.rotateTextDisabled]}>
+                  Rotate Right
+                </Text>
               </TouchableOpacity>
             </View>
           </GlassCard>
@@ -335,28 +352,32 @@ const DroneScreen = () => {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
+    backgroundColor: '#0B0E14',
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingBottom: hp(10 ),
+    backgroundColor: '#0B0E14',
   },
   container: {
     paddingHorizontal: wp(4),
-    paddingVertical: hp(2),
-    paddingBottom: hp(6)
+    paddingTop: hp(2),
+    backgroundColor: '#0B0E14',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: hp(2),
+    marginBottom: hp(2.5),
   },
   headerTextContainer: {
     flex: 1,
   },
   headerTitle: {
-    fontSize: wp(6),
-    fontWeight: '600',
+    fontSize: wp(7),
+    fontWeight: '700',
     color: '#FFFFFF',
+    letterSpacing: -0.5,
   },
   connectionStatusContainer: {
     flexDirection: 'row',
@@ -364,9 +385,9 @@ const styles = StyleSheet.create({
     marginTop: hp(0.5),
   },
   connectionDot: {
-    width: wp(2),
-    height: wp(2),
-    borderRadius: wp(1),
+    width: wp(2.5),
+    height: wp(2.5),
+    borderRadius: wp(1.25),
     marginRight: wp(1.5),
   },
   connectedDot: {
@@ -377,7 +398,7 @@ const styles = StyleSheet.create({
   },
   connectionStatus: {
     fontSize: wp(3.5),
-    fontWeight: '500',
+    fontWeight: '600',
   },
   connectedText: {
     color: '#10B981',
@@ -386,10 +407,10 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
   headerIconContainer: {
-    width: wp(12),
-    height: wp(12),
-    borderRadius: wp(6),
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
+    width: wp(13),
+    height: wp(13),
+    borderRadius: wp(6.5),
+    backgroundColor: '#1A1F2E',
     borderWidth: 2,
     borderColor: '#4DB6AC',
     alignItems: 'center',
@@ -397,22 +418,15 @@ const styles = StyleSheet.create({
   },
   cameraCard: {
     padding: wp(4),
-    marginBottom: hp(2),
+    marginBottom: hp(2.5),
+    backgroundColor: '#1A1F2E',
   },
   cameraPreview: {
     aspectRatio: 16 / 9,
-    backgroundColor: '#111827',
+    backgroundColor: '#0B0E14',
     borderRadius: wp(3),
     overflow: 'hidden',
     position: 'relative',
-  },
-  cameraGradient: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
   },
   cameraIconContainer: {
     position: 'absolute',
@@ -429,6 +443,12 @@ const styles = StyleSheet.create({
     left: wp(3),
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#141922',
+    paddingHorizontal: wp(2.5),
+    paddingVertical: hp(0.5),
+    borderRadius: wp(5),
+    borderWidth: 1,
+    borderColor: '#EF4444',
   },
   liveDot: {
     width: wp(2),
@@ -438,14 +458,10 @@ const styles = StyleSheet.create({
     marginRight: wp(1.5),
   },
   liveText: {
-    fontSize: wp(3),
+    fontSize: wp(2.8),
     color: '#FFFFFF',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingHorizontal: wp(2),
-    paddingVertical: hp(0.5),
-    borderRadius: wp(1),
-    fontWeight: '500',
-    overflow: 'hidden',
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   batteryIndicator: {
     position: 'absolute',
@@ -453,16 +469,17 @@ const styles = StyleSheet.create({
     right: wp(3),
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingHorizontal: wp(3),
+    backgroundColor: '#141922',
+    paddingHorizontal: wp(2.5),
     paddingVertical: hp(0.5),
-    borderRadius: wp(1),
+    borderRadius: wp(5),
+    borderWidth: 1,
+    borderColor: '#2A2F3E',
   },
   batteryText: {
     fontSize: wp(3),
-    color: '#FFFFFF',
-    fontWeight: '500',
-    marginLeft: wp(1),
+    fontWeight: '600',
+    marginLeft: wp(1.5),
   },
   offlineOverlay: {
     position: 'absolute',
@@ -470,51 +487,72 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(11, 14, 20, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   offlineText: {
-    fontSize: wp(4),
-    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: wp(4.5),
+    fontWeight: '600',
+    color: '#9CA3AF',
   },
   statsGrid: {
     flexDirection: 'row',
-    marginBottom: hp(2),
+    marginBottom: hp(2.5),
   },
   statCard: {
     flex: 1,
-    padding: wp(3),
+    padding: wp(3.5),
+    backgroundColor: '#1A1F2E',
+  },
+  statCardMargin: {
     marginRight: wp(3),
   },
   statContent: {
     alignItems: 'center',
   },
+  statIconContainer: {
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(5),
+    backgroundColor: '#141922',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: hp(1),
+  },
   statLabel: {
-    fontSize: wp(3),
+    fontSize: wp(3.2),
     color: '#9CA3AF',
-    marginTop: hp(1),
     marginBottom: hp(0.5),
   },
   statValue: {
-    fontSize: wp(4),
-    fontWeight: '600',
+    fontSize: wp(4.2),
+    fontWeight: '700',
     color: '#FFFFFF',
   },
   quickActionsCard: {
-    padding: wp(6),
-    marginBottom: hp(2),
+    padding: wp(5),
+    marginBottom: hp(2.5),
+    backgroundColor: '#1A1F2E',
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: hp(2),
   },
+  sectionIconBadge: {
+    width: wp(9),
+    height: wp(9),
+    borderRadius: wp(4.5),
+    backgroundColor: '#141922',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: wp(2.5),
+  },
   sectionTitle: {
-    fontSize: wp(4),
-    fontWeight: '500',
+    fontSize: wp(4.5),
+    fontWeight: '600',
     color: '#FFFFFF',
-    marginLeft: wp(2),
   },
   actionsContainer: {
     gap: hp(1.5),
@@ -529,16 +567,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   startPatrolButton: {
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-    borderColor: 'rgba(16, 185, 129, 0.2)',
+    backgroundColor: '#1A2A1A',
+    borderColor: '#10B981',
   },
   stopPatrolButton: {
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    borderColor: 'rgba(239, 68, 68, 0.2)',
+    backgroundColor: '#2A1A1A',
+    borderColor: '#EF4444',
   },
   patrolButtonText: {
-    fontSize: wp(3.5),
-    fontWeight: '500',
+    fontSize: wp(3.6),
+    fontWeight: '600',
     marginLeft: wp(2),
   },
   startPatrolText: {
@@ -555,35 +593,54 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   manualControlButton: {
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
-    borderColor: 'rgba(77, 182, 172, 0.2)',
+    backgroundColor: '#1A1F2E',
+    borderColor: '#4DB6AC',
   },
   manualControlText: {
-    fontSize: wp(3.5),
-    fontWeight: '500',
+    fontSize: wp(3.6),
+    fontWeight: '600',
     color: '#4DB6AC',
   },
   returnHomeButton: {
     backgroundColor: '#141922',
-    borderColor: 'rgba(77, 182, 172, 0.2)',
+    borderColor: '#2A2F3E',
   },
   returnHomeText: {
-    fontSize: wp(3.5),
+    fontSize: wp(3.6),
     fontWeight: '500',
-    color: '#D1D5DB',
+    color: '#9CA3AF',
   },
   disabledButton: {
     opacity: 0.5,
   },
   controlPadCard: {
-    padding: wp(6),
+    padding: wp(5),
+    marginBottom: hp(2.5),
+    backgroundColor: '#1A1F2E',
+  },
+  controlPadHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: hp(2),
   },
   controlPadTitle: {
-    fontSize: wp(4),
-    fontWeight: '500',
+    fontSize: wp(4.2),
+    fontWeight: '600',
     color: '#FFFFFF',
-    marginBottom: hp(2),
+  },
+  offlineBadge: {
+    backgroundColor: '#2A1A1A',
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(0.5),
+    borderRadius: wp(5),
+    borderWidth: 1,
+    borderColor: '#EF4444',
+  },
+  offlineBadgeText: {
+    fontSize: wp(3),
+    fontWeight: '600',
+    color: '#EF4444',
   },
   controlPadContainer: {
     alignItems: 'center',
@@ -597,58 +654,62 @@ const styles = StyleSheet.create({
     borderRadius: wp(35),
     backgroundColor: '#141922',
     borderWidth: 2,
-    borderColor: 'rgba(77, 182, 172, 0.3)',
+    borderColor: '#4DB6AC',
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
   },
   controlPadInner: {
-    width: '60%',
-    height: '60%',
+    width: '55%',
+    height: '55%',
     borderRadius: wp(35),
-    backgroundColor: '#141922',
+    backgroundColor: '#1A1F2E',
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.2)',
+    borderColor: '#2A2F3E',
     position: 'absolute',
   },
   directionButton: {
-    width: wp(16),
-    height: wp(16),
-    maxWidth: 64,
-    maxHeight: 64,
-    borderRadius: wp(8),
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.5)',
+    width: wp(15),
+    height: wp(15),
+    maxWidth: 60,
+    maxHeight: 60,
+    borderRadius: wp(7.5),
+    backgroundColor: '#1A1F2E',
+    borderWidth: 1.5,
+    borderColor: '#4DB6AC',
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  directionDisabled: {
+    borderColor: '#4B5563',
+    opacity: 0.5,
+  },
   upButton: {
-    top: 0,
+    top: wp(1),
     left: '50%',
-    transform: [{ translateX: -wp(8) }],
+    transform: [{ translateX: -wp(7.5) }],
   },
   downButton: {
-    bottom: 0,
+    bottom: wp(1),
     left: '50%',
-    transform: [{ translateX: -wp(8) }],
+    transform: [{ translateX: -wp(7.5) }],
   },
   leftButton: {
-    left: 0,
+    left: wp(1),
     top: '50%',
-    transform: [{ translateY: -hp(4) }],
+    transform: [{ translateY: -hp(3.75) }],
   },
   rightButton: {
-    right: 0,
+    right: wp(1),
     top: '50%',
-    transform: [{ translateY: -hp(4) }],
+    transform: [{ translateY: -hp(3.75) }],
   },
   arrowUp: {
     width: 0,
     height: 0,
-    borderLeftWidth: wp(2),
-    borderRightWidth: wp(2),
+    borderLeftWidth: wp(2.5),
+    borderRightWidth: wp(2.5),
     borderBottomWidth: hp(1.5),
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
@@ -657,8 +718,8 @@ const styles = StyleSheet.create({
   arrowDown: {
     width: 0,
     height: 0,
-    borderLeftWidth: wp(2),
-    borderRightWidth: wp(2),
+    borderLeftWidth: wp(2.5),
+    borderRightWidth: wp(2.5),
     borderTopWidth: hp(1.5),
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
@@ -667,9 +728,9 @@ const styles = StyleSheet.create({
   arrowLeft: {
     width: 0,
     height: 0,
-    borderTopWidth: wp(2),
-    borderBottomWidth: wp(2),
-    borderRightWidth: wp(3),
+    borderTopWidth: wp(2.5),
+    borderBottomWidth: wp(2.5),
+    borderRightWidth: wp(3.5),
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     borderRightColor: '#4DB6AC',
@@ -677,25 +738,28 @@ const styles = StyleSheet.create({
   arrowRight: {
     width: 0,
     height: 0,
-    borderTopWidth: wp(2),
-    borderBottomWidth: wp(2),
-    borderLeftWidth: wp(3),
+    borderTopWidth: wp(2.5),
+    borderBottomWidth: wp(2.5),
+    borderLeftWidth: wp(3.5),
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     borderLeftColor: '#4DB6AC',
   },
   centerDroneIcon: {
     position: 'absolute',
-    width: wp(20),
-    height: wp(20),
-    maxWidth: 80,
-    maxHeight: 80,
-    borderRadius: wp(10),
-    backgroundColor: 'rgba(77, 182, 172, 0.2)',
+    width: wp(18),
+    height: wp(18),
+    maxWidth: 72,
+    maxHeight: 72,
+    borderRadius: wp(9),
+    backgroundColor: '#141922',
     borderWidth: 2,
     borderColor: '#4DB6AC',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  centerDroneDisabled: {
+    borderColor: '#4B5563',
   },
   rotationControls: {
     flexDirection: 'row',
@@ -706,18 +770,24 @@ const styles = StyleSheet.create({
     paddingVertical: hp(1.5),
     backgroundColor: '#141922',
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.2)',
+    borderColor: '#2A2F3E',
     borderRadius: wp(3),
     alignItems: 'center',
+  },
+  rotateDisabled: {
+    opacity: 0.5,
   },
   rotateButtonText: {
     fontSize: wp(3.5),
     fontWeight: '500',
     color: '#D1D5DB',
   },
+  rotateTextDisabled: {
+    color: '#6B7280',
+  },
   connectionCard: {
-    padding: wp(4),
-    marginBottom: hp(2),
+    padding: wp(5),
+    backgroundColor: '#1A1F2E',
   },
   connectionCardContent: {
     flexDirection: 'row',
@@ -733,26 +803,26 @@ const styles = StyleSheet.create({
     marginBottom: hp(0.5),
   },
   connectionStateText: {
-    fontSize: wp(4),
-    fontWeight: '500',
+    fontSize: wp(4.2),
+    fontWeight: '600',
   },
   connectButton: {
-    paddingHorizontal: wp(4),
-    paddingVertical: hp(1),
-    borderRadius: wp(2),
+    paddingHorizontal: wp(5),
+    paddingVertical: hp(1.2),
+    borderRadius: wp(3),
     borderWidth: 1,
   },
   connectButtonStyle: {
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-    borderColor: 'rgba(16, 185, 129, 0.2)',
+    backgroundColor: '#1A2A1A',
+    borderColor: '#10B981',
   },
   disconnectButtonStyle: {
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    borderColor: 'rgba(239, 68, 68, 0.2)',
+    backgroundColor: '#2A1A1A',
+    borderColor: '#EF4444',
   },
   connectButtonText: {
-    fontSize: wp(3.5),
-    fontWeight: '500',
+    fontSize: wp(3.6),
+    fontWeight: '600',
   },
   connectText: {
     color: '#10B981',

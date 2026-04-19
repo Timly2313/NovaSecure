@@ -115,7 +115,7 @@ const CloudStorageScreen = () => {
           <GlassCard style={styles.storageCard}>
             <View style={styles.storageHeader}>
               <View style={styles.storageIconContainer}>
-                <HardDrive color="#4DB6AC" size={wp(8)} />
+                <HardDrive color="#4DB6AC" size={wp(7)} />
               </View>
               <View style={styles.storageInfo}>
                 <Text style={styles.storageTitle}>Storage Usage</Text>
@@ -135,24 +135,34 @@ const CloudStorageScreen = () => {
                 />
               </View>
             </View>
-            <Text style={styles.progressPercentage}>
-              {storagePercentage.toFixed(1)}% used
-            </Text>
+            <View style={styles.progressFooter}>
+              <Text style={styles.progressPercentage}>
+                {storagePercentage.toFixed(1)}% used
+              </Text>
+              <Text style={styles.storageRemaining}>
+                {(totalStorage - usedStorage).toFixed(1)}GB free
+              </Text>
+            </View>
           </GlassCard>
 
           {/* Recent Recordings Section */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Video color="#4DB6AC" size={wp(5)} />
+              <View style={styles.sectionIconBadge}>
+                <Video color="#4DB6AC" size={wp(4.5)} />
+              </View>
               <Text style={styles.sectionTitle}>Recent Recordings</Text>
             </View>
             
-            <View style={styles.recordingsList}>
-              {recordings.map((recording) => (
-                <GlassCard key={recording.id} style={styles.recordingCard}>
+            <GlassCard style={styles.recordingsCard}>
+              {recordings.map((recording, index) => (
+                <View key={recording.id} style={[
+                  styles.recordingItem,
+                  index !== recordings.length - 1 && styles.recordingItemBorder
+                ]}>
                   <View style={styles.recordingContent}>
                     <View style={styles.recordingIconContainer}>
-                      <Video color="rgba(255,255,255,0.4)" size={wp(6)} />
+                      <Video color="#4DB6AC" size={wp(5)} />
                     </View>
                     <View style={styles.recordingDetails}>
                       <Text style={styles.recordingName} numberOfLines={1}>
@@ -160,9 +170,10 @@ const CloudStorageScreen = () => {
                       </Text>
                       <View style={styles.recordingMeta}>
                         <View style={styles.recordingMetaItem}>
-                          <Calendar color="#9CA3AF" size={wp(3)} />
+                          <Calendar color="#6B7280" size={wp(3.5)} />
                           <Text style={styles.recordingMetaText}>{recording.date}</Text>
                         </View>
+                        <View style={styles.recordingMetaDivider} />
                         <Text style={styles.recordingMetaText}>{recording.duration}</Text>
                       </View>
                       <Text style={styles.recordingSize}>{recording.size}</Text>
@@ -184,9 +195,9 @@ const CloudStorageScreen = () => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                </GlassCard>
+                </View>
               ))}
-            </View>
+            </GlassCard>
           </View>
 
           {/* Upgrade Storage Section */}
@@ -205,7 +216,7 @@ const CloudStorageScreen = () => {
                   {plan.popular && (
                     <View style={styles.popularBadgeContainer}>
                       <View style={styles.popularBadge}>
-                        <Text style={styles.popularBadgeText}>Popular</Text>
+                        <Text style={styles.popularBadgeText}>Most Popular</Text>
                       </View>
                     </View>
                   )}
@@ -217,13 +228,18 @@ const CloudStorageScreen = () => {
                     </View>
                     <View style={styles.planPriceContainer}>
                       <Text style={styles.planPrice}>{plan.price}</Text>
+                      {!plan.current && plan.price !== "Free" && (
+                        <Text style={styles.planPeriod}>per month</Text>
+                      )}
                     </View>
                   </View>
 
                   <View style={styles.planFeatures}>
                     {plan.features.map((feature) => (
                       <View key={feature} style={styles.featureItem}>
-                        <Check color="#10B981" size={wp(4)} />
+                        <View style={styles.featureCheckContainer}>
+                          <Check color="#10B981" size={wp(3.5)} />
+                        </View>
                         <Text style={styles.featureText}>{feature}</Text>
                       </View>
                     ))}
@@ -232,7 +248,8 @@ const CloudStorageScreen = () => {
                   <TouchableOpacity
                     style={[
                       styles.upgradeButton,
-                      plan.current && styles.currentPlanButton
+                      plan.current && styles.currentPlanButton,
+                      plan.popular && !plan.current && styles.popularUpgradeButton
                     ]}
                     onPress={() => !plan.current && handleUpgrade(plan.name)}
                     disabled={plan.current}
@@ -240,7 +257,8 @@ const CloudStorageScreen = () => {
                   >
                     <Text style={[
                       styles.upgradeButtonText,
-                      plan.current && styles.currentPlanButtonText
+                      plan.current && styles.currentPlanButtonText,
+                      plan.popular && !plan.current && styles.popularUpgradeButtonText
                     ]}>
                       {plan.current ? "Current Plan" : "Upgrade Now"}
                     </Text>
@@ -258,46 +276,52 @@ const CloudStorageScreen = () => {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
+    backgroundColor: '#0B0E14',
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingBottom: hp(8),
+    backgroundColor: '#0B0E14',
   },
   container: {
     paddingHorizontal: wp(4),
-    paddingVertical: hp(2),
+    paddingTop: hp(2),
+    backgroundColor: '#0B0E14',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: hp(2),
+    marginBottom: hp(2.5),
   },
   headerTextContainer: {
     flex: 1,
   },
   headerTitle: {
-    fontSize: wp(6),
-    fontWeight: '600',
+    fontSize: wp(7),
+    fontWeight: '700',
     color: '#FFFFFF',
+    letterSpacing: -0.5,
   },
   headerSubtitle: {
-    fontSize: wp(3.5),
+    fontSize: wp(3.8),
     color: '#9CA3AF',
     marginTop: hp(0.5),
   },
   headerIconContainer: {
-    width: wp(12),
-    height: wp(12),
-    borderRadius: wp(6),
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
+    width: wp(13),
+    height: wp(13),
+    borderRadius: wp(6.5),
+    backgroundColor: '#1A1F2E',
     borderWidth: 2,
     borderColor: '#4DB6AC',
     alignItems: 'center',
     justifyContent: 'center',
   },
   storageCard: {
-    padding: wp(6),
-    marginBottom: hp(2),
+    padding: wp(5),
+    marginBottom: hp(2.5),
+    backgroundColor: '#1A1F2E',
   },
   storageHeader: {
     flexDirection: 'row',
@@ -305,65 +329,90 @@ const styles = StyleSheet.create({
     marginBottom: hp(2),
   },
   storageIconContainer: {
-    width: wp(16),
-    height: wp(16),
-    borderRadius: wp(8),
-    backgroundColor: 'rgba(77, 182, 172, 0.2)',
+    width: wp(14),
+    height: wp(14),
+    borderRadius: wp(7),
+    backgroundColor: '#141922',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: wp(4),
+    borderWidth: 1,
+    borderColor: '#4DB6AC',
   },
   storageInfo: {
     flex: 1,
   },
   storageTitle: {
-    fontSize: wp(4),
-    fontWeight: '500',
+    fontSize: wp(4.2),
+    fontWeight: '600',
     color: '#FFFFFF',
     marginBottom: hp(0.5),
   },
   storageSubtitle: {
-    fontSize: wp(3.5),
+    fontSize: wp(3.6),
     color: '#9CA3AF',
   },
   progressBarContainer: {
-    marginBottom: hp(1),
+    marginBottom: hp(1.2),
   },
   progressBarBackground: {
-    height: hp(1.5),
-    backgroundColor: '#374151',
-    borderRadius: wp(2),
+    height: hp(1.2),
+    backgroundColor: '#2A2F3E',
+    borderRadius: wp(3),
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
     backgroundColor: '#4DB6AC',
-    borderRadius: wp(2),
+    borderRadius: wp(3),
+  },
+  progressFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   progressPercentage: {
-    fontSize: wp(3),
+    fontSize: wp(3.2),
+    color: '#4DB6AC',
+    fontWeight: '600',
+  },
+  storageRemaining: {
+    fontSize: wp(3.2),
     color: '#9CA3AF',
-    textAlign: 'right',
   },
   section: {
-    marginBottom: hp(2),
+    marginBottom: hp(2.5),
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: hp(1.5),
   },
+  sectionIconBadge: {
+    width: wp(9),
+    height: wp(9),
+    borderRadius: wp(4.5),
+    backgroundColor: '#141922',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: wp(2.5),
+  },
   sectionTitle: {
-    fontSize: wp(4),
-    fontWeight: '500',
+    fontSize: wp(4.5),
+    fontWeight: '600',
     color: '#FFFFFF',
-    marginLeft: wp(2),
   },
-  recordingsList: {
-    gap: hp(1),
+  recordingsCard: {
+    padding: 0,
+    backgroundColor: '#1A1F2E',
+    overflow: 'hidden',
   },
-  recordingCard: {
+  recordingItem: {
     padding: wp(4),
+  },
+  recordingItemBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#2A2F3E',
   },
   recordingContent: {
     flexDirection: 'row',
@@ -373,17 +422,19 @@ const styles = StyleSheet.create({
     width: wp(12),
     height: wp(12),
     backgroundColor: '#141922',
-    borderRadius: wp(2),
+    borderRadius: wp(2.5),
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: wp(3),
+    marginRight: wp(3.5),
+    borderWidth: 1,
+    borderColor: '#2A2F3E',
   },
   recordingDetails: {
     flex: 1,
   },
   recordingName: {
-    fontSize: wp(3.5),
-    fontWeight: '500',
+    fontSize: wp(3.8),
+    fontWeight: '600',
     color: '#FFFFFF',
     marginBottom: hp(0.5),
   },
@@ -395,69 +446,78 @@ const styles = StyleSheet.create({
   recordingMetaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: wp(3),
+  },
+  recordingMetaDivider: {
+    width: wp(1),
+    height: wp(1),
+    borderRadius: wp(0.5),
+    backgroundColor: '#4B5563',
+    marginHorizontal: wp(2),
   },
   recordingMetaText: {
-    fontSize: wp(3),
+    fontSize: wp(3.2),
     color: '#9CA3AF',
     marginLeft: wp(1),
   },
   recordingSize: {
-    fontSize: wp(3),
-    color: '#9CA3AF',
+    fontSize: wp(3.2),
+    color: '#6B7280',
+    fontWeight: '500',
   },
   recordingActions: {
     flexDirection: 'row',
     gap: wp(2),
   },
   downloadButton: {
-    padding: wp(2),
-    backgroundColor: 'rgba(77, 182, 172, 0.1)',
-    borderRadius: wp(2),
+    padding: wp(2.5),
+    backgroundColor: '#141922',
+    borderRadius: wp(2.5),
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.2)',
+    borderColor: '#4DB6AC',
   },
   deleteButton: {
-    padding: wp(2),
+    padding: wp(2.5),
     backgroundColor: '#141922',
-    borderRadius: wp(2),
+    borderRadius: wp(2.5),
     borderWidth: 1,
-    borderColor: 'rgba(77, 182, 172, 0.2)',
+    borderColor: '#2A2F3E',
   },
   upgradeTitle: {
     fontSize: wp(4.5),
-    fontWeight: '500',
+    fontWeight: '600',
     color: '#FFFFFF',
     marginBottom: hp(1.5),
   },
   plansList: {
-    gap: hp(1.5),
+    gap: hp(2),
   },
   planCard: {
-    padding: wp(4),
+    padding: wp(5),
     position: 'relative',
+    backgroundColor: '#1A1F2E',
   },
   popularPlanCard: {
     borderWidth: 2,
     borderColor: '#4DB6AC',
+    backgroundColor: '#1A2524',
   },
   popularBadgeContainer: {
     position: 'absolute',
-    top: -hp(1.5),
+    top: -hp(1.8),
     left: '50%',
-    transform: [{ translateX: -wp(15) }],
+    transform: [{ translateX: -wp(18) }],
     zIndex: 1,
   },
   popularBadge: {
     backgroundColor: '#4DB6AC',
-    paddingHorizontal: wp(3),
-    paddingVertical: hp(0.5),
-    borderRadius: wp(4),
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(0.6),
+    borderRadius: wp(5),
   },
   popularBadgeText: {
-    fontSize: wp(3),
+    fontSize: wp(3.2),
     color: '#FFFFFF',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   planHeader: {
     flexDirection: 'row',
@@ -469,53 +529,78 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   planName: {
-    fontSize: wp(4),
-    fontWeight: '600',
+    fontSize: wp(4.5),
+    fontWeight: '700',
     color: '#FFFFFF',
     marginBottom: hp(0.5),
   },
   planStorage: {
-    fontSize: wp(3.5),
-    color: '#D1D5DB',
+    fontSize: wp(3.8),
+    color: '#9CA3AF',
+    fontWeight: '500',
   },
   planPriceContainer: {
     alignItems: 'flex-end',
   },
   planPrice: {
-    fontSize: wp(5),
-    fontWeight: '600',
+    fontSize: wp(5.5),
+    fontWeight: '700',
     color: '#4DB6AC',
   },
+  planPeriod: {
+    fontSize: wp(3),
+    color: '#6B7280',
+    marginTop: hp(0.3),
+  },
   planFeatures: {
-    marginBottom: hp(2),
-    gap: hp(1),
+    marginBottom: hp(2.5),
+    gap: hp(1.2),
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  featureCheckContainer: {
+    width: wp(5),
+    height: wp(5),
+    borderRadius: wp(2.5),
+    backgroundColor: '#1A2A1A',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: wp(2.5),
+  },
   featureText: {
     fontSize: wp(3.5),
     color: '#D1D5DB',
-    marginLeft: wp(2),
+    flex: 1,
   },
   upgradeButton: {
     width: '100%',
     paddingVertical: hp(1.5),
-    borderRadius: wp(2),
+    borderRadius: wp(3),
     alignItems: 'center',
+    backgroundColor: '#1A1F2E',
+    borderWidth: 1,
+    borderColor: '#4DB6AC',
+  },
+  popularUpgradeButton: {
     backgroundColor: '#4DB6AC',
+    borderWidth: 0,
   },
   currentPlanButton: {
     backgroundColor: '#141922',
+    borderColor: '#2A2F3E',
   },
   upgradeButtonText: {
-    fontSize: wp(3.5),
-    fontWeight: '500',
+    fontSize: wp(3.8),
+    fontWeight: '600',
+    color: '#4DB6AC',
+  },
+  popularUpgradeButtonText: {
     color: '#FFFFFF',
   },
   currentPlanButtonText: {
-    color: '#9CA3AF',
+    color: '#6B7280',
   },
 });
 

@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "PlugU",
-    "slug": "PlugU",
+    "name": "NovaSecure",
+    "slug": "NovaSecure",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "plugu",
+    "scheme": "NovaSecure",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {

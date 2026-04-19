@@ -5,7 +5,7 @@ export default function WelcomeScreen() {
   const router = useRouter();
 
   const handleContinue = () => {
-    router.replace("/LoginScreen");
+    router.replace("/DashboardScreen");
   };
 
   return (
@@ -19,9 +19,9 @@ export default function WelcomeScreen() {
 
       {/* Content */}
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome to PlugU</Text>
+        <Text style={styles.title}>NovaSecure</Text>
         <Text style={styles.subtitle}>
-          The student marketplace where you connect, buy, and sell on campus.
+          Redefining Home Security with AI
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={handleContinue}>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(22, 26, 51, 0.8)", 
+    backgroundColor: "rgba(0, 2, 1, 0.8)", 
   },
   content: {
     alignItems: "center",
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "100%",
-    backgroundColor: "#3F51B5", 
+    backgroundColor: "#4DB6AC", 
     paddingVertical: 16,
     borderRadius: 50,
     alignItems: "center",

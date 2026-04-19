@@ -8,11 +8,11 @@ export default function TabsLayout() {
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <CustomNavBar {...props} />}
     >
-      <Tabs.Screen name="HomeScreen" options={{ title: "Market" }} />
-      <Tabs.Screen name="MessagesScreen" options={{ title: "Messages" }} />
-      <Tabs.Screen name="CommunityScreen" options={{ title: "Community" }} />
-    
-      <Tabs.Screen name="ProfileScreen" options={{ title: "Profile" }} />
+      <Tabs.Screen name="DashboardScreen" options={{ title: "Home" }} />
+      <Tabs.Screen name="EventLogsScreen" options={{ title: "Logs" }} />
+      <Tabs.Screen name="CloudStorageScreen" options={{ title: "Storage" }} />
+      <Tabs.Screen name="DroneScreen" options={{ title: "Drone" }} />
+      <Tabs.Screen name="SettingsScreen" options={{ title: "Settings" }} />
     </Tabs>
   );
 }

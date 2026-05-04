@@ -5,8 +5,8 @@ import time
 
 app = Flask(__name__)
 
-# Load YOLO model
-model = YOLO("yolov8n.pt")  # or yolov8s.pt for better accuracy
+# UPGRADE 1: Changed from yolov8n (Nano) to yolov8s (Small) for much better accuracy
+model = YOLO("yolov8s.pt")  
 
 # Open webcam (0 = default camera)
 cap = cv2.VideoCapture(0)
@@ -17,8 +17,9 @@ def generate_frames():
         if not success:
             break
 
-        # Run YOLO detection on the frame
-        results = model(frame)[0]
+        # UPGRADE 2: Added conf=0.6 so it only shows objects it is at least 60% sure about. 
+        # (Notice we did NOT add classes=[0], so it still detects everything)
+        results = model(frame, conf=0.6)[0]
 
         # Draw bounding boxes
         annotated_frame = results.plot()  # built-in drawing
@@ -46,8 +47,8 @@ def snapshot():
     if not success:
         return "Failed to grab frame", 500
 
-    # Run YOLO detection on the single frame
-    results = model(frame)[0]
+    # UPGRADE 2: Added the same 60% confidence filter here
+    results = model(frame, conf=0.6)[0]
 
     # Draw bounding boxes
     annotated_frame = results.plot()
